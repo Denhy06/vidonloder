@@ -22,11 +22,10 @@ export async function GET(request) {
       platform = 'tiktok';
       result = await scrapeTiktok(videoUrl);
 
-      // BUNGKUS otomatis link download TikTok dengan proxy lokal
-      // Agar saat tombol diklik di frontend, tidak terjadi "Access Denied"
+      // KUNCI UTAMA: Bungkus link TikTok dengan endpoint stream lokal 
+      // Agar tombol di frontend (yang tidak diubah) tidak kena "Access Denied"
       if (result && result.download_url) {
-        const encodedUrl = encodeURIComponent(result.download_url);
-        result.download_url = `/api/proxy?url=${encodedUrl}`;
+        result.download_url = `/api/download/stream?url=${encodeURIComponent(result.download_url)}`;
       }
 
     } else if (videoUrl.includes('facebook.com') || videoUrl.includes('fb.watch')) {
