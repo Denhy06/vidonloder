@@ -22,10 +22,9 @@ export async function GET(request) {
       platform = 'tiktok';
       result = await scrapeTiktok(videoUrl);
 
-      // KUNCI UTAMA: Bungkus link TikTok dengan endpoint stream lokal 
-      // Agar tombol di frontend (yang tidak diubah) tidak kena "Access Denied"
+      // Bungkus link TikTok ke proxy lokal agar lolos dari blokir 403 CDN TikTok
       if (result && result.download_url) {
-        result.download_url = `/api/download/stream?url=${encodeURIComponent(result.download_url)}`;
+        result.download_url = `/api/stream?url=${encodeURIComponent(result.download_url)}`;
       }
 
     } else if (videoUrl.includes('facebook.com') || videoUrl.includes('fb.watch')) {
