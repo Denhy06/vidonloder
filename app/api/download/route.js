@@ -21,6 +21,14 @@ export async function GET(request) {
     if (videoUrl.includes('tiktok.com')) {
       platform = 'tiktok';
       result = await scrapeTiktok(videoUrl);
+
+      // BUNGKUS otomatis link download TikTok dengan proxy lokal
+      // Agar saat tombol diklik di frontend, tidak terjadi "Access Denied"
+      if (result && result.download_url) {
+        const encodedUrl = encodeURIComponent(result.download_url);
+        result.download_url = `/api/proxy?url=${encodedUrl}`;
+      }
+
     } else if (videoUrl.includes('facebook.com') || videoUrl.includes('fb.watch')) {
       platform = 'facebook';
       result = await scrapeFacebook(videoUrl);
