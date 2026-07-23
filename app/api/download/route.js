@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { scrapeTiktok } from '../../../lib/scrapers/tiktok';
 import { scrapeFacebook } from '../../../lib/scrapers/facebook';
 import { scrapePinterest } from '../../../lib/scrapers/pinterest';
+import { scrapeInstagram } from '../../../lib/scrapers/instagram'; // <-- IMPORT INSTAGRAM SCRAPER
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -27,12 +28,18 @@ export async function GET(request) {
         result.download_url = `/api/download/stream?url=${encodeURIComponent(result.download_url)}`;
       }
 
+    } else if (videoUrl.includes('instagram.com')) {  // <-- TAMBAHKAN BLOCK INSTAGRAM
+      platform = 'instagram';
+      result = await scrapeInstagram(videoUrl);
+      
     } else if (videoUrl.includes('facebook.com') || videoUrl.includes('fb.watch')) {
       platform = 'facebook';
       result = await scrapeFacebook(videoUrl);
+      
     } else if (videoUrl.includes('pinterest.com') || videoUrl.includes('pin.it')) {
       platform = 'pinterest';
       result = await scrapePinterest(videoUrl);
+      
     } else {
       return NextResponse.json(
         { status: false, message: 'Platform belum didukung!' }, 
