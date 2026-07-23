@@ -15,7 +15,6 @@ export default function Home() {
     setResult(null);
 
     try {
-      // Memanggil endpoint API buatanmu sendiri
       const res = await fetch(`/api/download?url=${encodeURIComponent(url)}`);
       const data = await res.json();
       
@@ -34,7 +33,7 @@ export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-slate-900 text-slate-50">
       
-      {/* Container Utama - UI Downloader */}
+      {/* Container Utama */}
       <div className="w-full max-w-2xl bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-xl border border-slate-700 mb-6">
         <h1 className="text-3xl font-bold mb-3 text-center text-white">Video Downloader</h1>
         
@@ -77,25 +76,59 @@ export default function Home() {
           </div>
         )}
 
-        {/* Area Hasil Output */}
+        {/* Area Hasil Output (Detail Data) */}
         {result && result.data && (
-          <div className="mt-6 p-4 bg-slate-900 rounded-xl border border-slate-700 flex flex-col items-center gap-3">
-            <h3 className="font-medium text-sm text-center text-white">
-              {result.data.title || 'Video Berhasil Diproses'}
-            </h3>
-            <a
-              href={result.data.download_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-lg transition-all"
-            >
-              Simpan File
-            </a>
+          <div className="mt-6 p-4 bg-slate-900 rounded-xl border border-slate-700 flex flex-col gap-4">
+            
+            {/* Badge Platform */}
+            <div className="flex items-center justify-between border-b border-slate-700 pb-3">
+              <span className="text-xs font-semibold text-slate-400">Data Ditemukan:</span>
+              <span className="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider border border-emerald-500/30">
+                {result.platform}
+              </span>
+            </div>
+
+            {/* Konten Thumbnail & Info */}
+            <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
+              
+              {/* Thumbnail Display */}
+              {result.data.thumbnail ? (
+                <div className="w-full sm:w-32 shrink-0">
+                  <img 
+                    src={result.data.thumbnail} 
+                    alt="Thumbnail" 
+                    className="w-full h-40 sm:h-32 object-cover rounded-lg border border-slate-700 shadow-md"
+                    onError={(e) => { e.target.style.display = 'none' }} 
+                  />
+                </div>
+              ) : (
+                <div className="w-full sm:w-32 h-40 sm:h-32 shrink-0 bg-slate-800 rounded-lg flex items-center justify-center border border-slate-700 text-slate-500 text-xs">
+                  No Image
+                </div>
+              )}
+
+              {/* Title & Download Button */}
+              <div className="flex flex-col flex-1 w-full h-full justify-between gap-3 text-center sm:text-left">
+                <h3 className="font-medium text-sm text-white line-clamp-3 leading-relaxed">
+                  {result.data.title || 'Tanpa Judul'}
+                </h3>
+                
+                <a
+                  href={result.data.download_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full mt-auto bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 rounded-lg transition-all text-sm text-center shadow-lg shadow-blue-900/20"
+                >
+                  Simpan File (MP4)
+                </a>
+              </div>
+              
+            </div>
           </div>
         )}
       </div>
 
-      {/* Area Dokumentasi API (Bawah) */}
+      {/* Area Dokumentasi API */}
       <div className="w-full max-w-2xl bg-slate-800 p-6 rounded-2xl border border-slate-700">
         <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
           👨‍💻 Dokumentasi API Endpoint
@@ -109,15 +142,15 @@ export default function Home() {
           </p>
           
           <div className="text-slate-500 mt-4 pt-4 border-t border-slate-700">
-            <p className="mb-2 text-slate-300 font-medium">Contoh Format Response (JSON):</p>
+            <p className="mb-2 text-slate-300 font-medium">Contoh Format Response JSON:</p>
             <pre className="text-xs text-sky-300 bg-slate-950 p-3 rounded-lg border border-slate-800">
 {`{
   "status": true,
   "platform": "tiktok",
   "data": {
-    "title": "Judul Video",
-    "download_url": "https://...",
-    "thumbnail": "https://..."
+    "title": "Judul Video Terkait",
+    "download_url": "https://link-asli-mp4...",
+    "thumbnail": "https://link-gambar..."
   }
 }`}
             </pre>
