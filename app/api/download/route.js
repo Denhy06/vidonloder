@@ -22,9 +22,9 @@ export async function GET(request) {
       platform = 'tiktok';
       result = await scrapeTiktok(videoUrl);
 
-      // Bungkus link TikTok ke proxy lokal agar lolos dari blokir 403 CDN TikTok
+      // Arahkan ke folder stream lokal sesuai struktur folder lu
       if (result && result.download_url) {
-        result.download_url = `/api/stream?url=${encodeURIComponent(result.download_url)}`;
+        result.download_url = `/api/download/stream?url=${encodeURIComponent(result.download_url)}`;
       }
 
     } else if (videoUrl.includes('facebook.com') || videoUrl.includes('fb.watch')) {
