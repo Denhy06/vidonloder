@@ -114,7 +114,7 @@ export default function Home() {
                 </h3>
                 
                 <a
-  href={`/api/download?url=${encodeURIComponent(result.data.download_url)}`}
+  href={result.data.download_url}
   target="_blank"
   rel="noopener noreferrer"
   className="w-full mt-auto bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 rounded-lg transition-all text-sm text-center shadow-lg shadow-blue-900/20"
